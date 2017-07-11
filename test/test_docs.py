@@ -44,4 +44,5 @@ def test_constraints(user):
 def test_query(user):
     results = User().objects(age=30)
     assert len(results) == 3
+    assert results.count() == 3
 

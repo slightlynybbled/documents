@@ -38,7 +38,7 @@ class Document:
 
             records = matching_records
 
-        return records
+        return Records(records)
 
     def _get_fields(self):
         return {k: v for k, v in self.__class__.__dict__.items() if isinstance(v, Field)}
@@ -86,6 +86,16 @@ class Document:
             f.write(json.dumps(records))
 
         return saved
+
+
+class Records(list):
+    def __init__(self, elements: list):
+        super().__init__(self)
+        for e in elements:
+            self.append(e)
+
+    def count(self):
+        return len(self)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
