@@ -41,3 +41,7 @@ def test_constraints(user):
     assert User(email='name3@email.com', name='name3', age='10').save() is False
 
 
+def test_query(user):
+    results = User().objects(age=30)
+    assert len(results) == 3
+
