@@ -44,6 +44,7 @@ class Document:
         return {k: v for k, v in self.__class__.__dict__.items() if isinstance(v, Field)}
 
     def save(self):
+        saved = True
         path = self.__class__.__name__.lower() + '.json'
 
         # open the file and read the contents
@@ -70,8 +71,9 @@ class Document:
                     record[name] = data
 
         except ValueError as e:
+            saved = False
             logger.error('validation problem: {} - aborting save'.format(e))
-            return
+            return saved
 
         logger.debug('document save path: {}'.format(self.__class__.__name__.lower()))
 
@@ -82,6 +84,8 @@ class Document:
         with open(path, 'w') as f:
             logger.debug(json.dumps(records))
             f.write(json.dumps(records))
+
+        return saved
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
