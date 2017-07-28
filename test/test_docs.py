@@ -1,6 +1,6 @@
 import os
 import pytest
-from documents import Document, StringField, IntField
+from documents import Document, StringField, IntField, Records
 
 
 class User(Document):
@@ -30,6 +30,10 @@ def test_document_creation(user):
     os.path.exists('user.json')
 
 
+def test_doesnt_exist():
+    assert User().objects(age=10) == []
+
+
 def test_constraints(user):
     # test unique constraint
     assert User(email='name0@email.com', name='name0', age=10).save() is False
@@ -41,8 +45,23 @@ def test_constraints(user):
     assert User(email='name3@email.com', name='name3', age='10').save() is False
 
 
-def test_query(user):
+def test_query_multiple(user):
     results = User().objects(age=30)
     assert len(results) == 3
     assert results.count() == 3
+    assert isinstance(results, list)
+    assert isinstance(results, Records)
 
+
+def test_query_first(user):
+    first_result = User().objects(age=30).first()
+
+    assert first_result['email'] == 'name2@email.com'
+    assert first_result['name'] == 'name2'
+    assert first_result['age'] == 30
+
+
+def test_query_first_not_exist(user):
+    first_result = User().objects(age=31).first()
+
+    assert first_result is None

@@ -97,12 +97,9 @@ class Records(list):
     def count(self):
         return len(self)
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-
-    doc = Document(email2='three@four.com')
-    doc.email = 'one@two.com'
-    print(vars(doc))
-
-    doc.save()
+    def first(self):
+        try:
+            return self[0]
+        except IndexError:
+            return None
 
